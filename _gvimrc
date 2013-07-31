@@ -1,0 +1,14 @@
+"背景色など
+colorscheme evening
+"フォント
+set guifont=MS_Gothic:h9:cSHIFTJIS
+"行番号
+set number
+"ビープ音を消す
+set visualbell t_vb=
+
+source $VIMRUNTIME/delmenu.vim
+set langmenu=ja_jp.utf-8
+source $VIMRUNTIME/menu.vim
+
+au GUIEnter * simalt ~x
