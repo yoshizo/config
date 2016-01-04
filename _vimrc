@@ -1,83 +1,88 @@
+"
+"TODO for using this on new environment
+"
+"1. Install pathogen
+"mkdir -p ~/.vim/autoload ~/.vim/bundle && \
+"curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
+"(Reference: https://github.com/tpope/vim-pathogen)
+"
+"2. Install plugins
+"cd ~/.vim/bundle
+"git clone https://github.com/mattn/emmet-vim.git
+"git clone https://github.com/tpope/vim-abolish.git
+"git clone https://github.com/tpope/vim-fugitive
+"git clone https://github.com/tpope/vim-surround.git
+"git clone https://github.com/Shougo/vimshell.vim.git
+"
 set nocompatible
 filetype off
-
-"----------------------------------------------------------------
-" bundle
-"----------------------------------------------------------------
-if has('vim_starting')
-  set runtimepath+=~/vimfiles/bundle/vundle/
-endif
-call vundle#rc('~/vimfiles/bundle')
-Bundle 'surround.vim'
-Bundle 'ZenCoding.vim'
-Bundle 'Handlebars'
-Bundle 'css_color.vim'
-Bundle 'gmarik/vundle'
-Bundle 'othree/html5.vim'
-
-"----------------------------------------------------------------
-" neobundle
-"----------------------------------------------------------------
-if has('vim_starting')
-  set runtimepath+=~/vimfiles/bundle/neobundle.vim/
-endif
-call neobundle#rc(expand('~/vimfiles/bundle'))
-NeoBundleFetch 'Shougo/neobundle.vim'
-NeoBundleFetch 'Shougo/vimproc'
-NeoBundle 'Shougo/unite.vim'
-NeoBundle 'Shougo/neocomplcache'
-NeoBundle 'Shougo/neosnippet'
-NeoBundle 'jiangmiao/simple-javascript-indenter'
-NeoBundle 'jelera/vim-javascript-syntax'
-NeoBundle 'teramako/jscomplete-vim'
-NeoBundle 'scrooloose/syntastic'
-NeoBundle 'nono/vim-handlebars'
-
-NeoBundleCheck
-
-filetype plugin indent on
-
 syntax on
 
-set textwidth=200
+"plugin
+execute pathogen#infect()
+filetype plugin indent on
 
 "encoding
 set encoding=utf-8
 set fileencodings=ucs-bom,utf-8,iso-2022-jp,sjis,cp932,euc-jp,cp20932
 
-"cursol
+"cursor
 set whichwrap=b,s,h,l,<,>,[,]
 
+"search
+set incsearch
+set hlsearch
+
+"format
 set expandtab
 set tabstop=2
 set softtabstop=0
 set shiftwidth=2
+set textwidth=9999
 
-set backupdir=$HOME/vimbackup
-set directory=$HOME/vimbackup
-
-
-set clipboard=unnamed
-set wildmode=longest:full,full
-"set wildmode=longest,full
-
+"buffer
 set hidden
-"set incsearch
 
-"----------------------------------------------------------------
-" file-browsing 
-"----------------------------------------------------------------
+"other
+set ambiwidth=double
+set noswapfile
+set backupdir=$HOME/vimfiles/vimbackup
+set directory=$HOME/vimfiles/vimbackup
+set clipboard=unnamed,autoselect
+set wildmode=longest:full,full
+set noundofile
+set history=2000
+
+"display
+set list
+set listchars=tab:▸\ ,trail:_,eol:¬,extends:>,precedes:<,nbsp:%
+
+"file-browsing
 let g:netrw_localcopycmd=''
 let g:netrw_preview=1
+set browsedir=buffer
 let g:netrw_liststyle=3
 let g:netrw_winsize=80
 let g:netrw_altv=1
 let g:netrw_alto=1
 
-
-"----------------------------------------------------------------
-" key-bind
-"----------------------------------------------------------------
+"key-bind
+nnoremap <silent> [b :bprevious<CR>
+nnoremap <silent> ]b :bnext<CR>
+nnoremap <silent> [B :bfirst<CR>
+nnoremap <silent> ]B :blast<CR>
+nnoremap <silent> [q :qprevious<CR>
+nnoremap <silent> ]q :qnext<CR>
+nnoremap <silent> [Q :qfirst<CR>
+nnoremap <silent> ]Q :qlast<CR>
+nnoremap <silent> [l :lprevious<CR>
+nnoremap <silent> ]l :lnext<CR>
+nnoremap <silent> [L :lfirst<CR>
+nnoremap <silent> ]L :llast<CR>
+nnoremap <silent> [t :tabprevious<CR>
+nnoremap <silent> ]t :tabNext<CR>
+nnoremap <silent> [T :tabfirst<CR>
+nnoremap <silent> ]T :tablast<CR>
 nnoremap <C-N> :bn<CR>
 nnoremap <C-P> :bp<CR>
 nnoremap <C-C> :bp\|bd #<CR>
@@ -87,98 +92,21 @@ nnoremap <Space>v :vsplit<CR><C-w><C-w>:ls<CR>:buffer
 nnoremap <Space>V :Vexplore!<CR><CR>
 nnoremap <C-H> <C-w>h
 nnoremap <C-L> <C-w>l
+nnoremap <C-J> <C-w>j
+nnoremap <C-K> <C-w>k
+"nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
+nnoremap /  /\v
+:cnoremap %s/ %s/\v
 
-"----------------------------------------------------------------
-" handlebars
-"----------------------------------------------------------------
-au BufRead,BufNewFile *.handlebars,*.hbs set ft=handlebars
+function! ZenkakuSpace()
+    highlight ZenkakuSpace cterm=reverse ctermfg=DarkMagenta gui=reverse guifg=DarkRed
+endfunction
 
-"----------------------------------------------------------------
-" zencoding
-"----------------------------------------------------------------
-let g:user_zen_settings = {
-\  'lang' : 'ja',
-\  'charset' : 'utf-8',
-\  'html' : {
-\    'filters' : 'html',
-\    'snippets' : {
-\      'jq' : "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js\"></script>\n<script>\n\\$(function() {\n\t|\n})()\n</script>",
-\      'cd' : "<![CDATA[|]]>",
-\    },
-\  },
-\  'php' : {
-\    'extends' : 'html',
-\    'filters' : 'html,c',
-\  },
-\  'javascript' : {
-\    'snippets' : {
-\      'jq' : "\\$(function() {\n\t\\${cursor}\\${child}\n});",
-\      'jq:json' : "\\$.getJSON(\"${cursor}\", function(data) {\n\t\\${child}\n});",
-\      'jq:each' : "\\$.each(data, function(index, item) {\n\t\\${child}\n});",
-\      'fn' : "(function() {\n\t\\${cursor}\n})();",
-\      'tm' : "setTimeout(function() {\n\t\\${cursor}\n}, 100);",
-\    },
-\    'use_pipe_for_cursor' : 0,
-\  },
-\  'css' : {
-\    'filters' : 'fc',
-\    'snippets' : {
-\      'box-shadow' : "-webkit-box-shadow: 0 0 0 # 000;\n-moz-box-shadow: 0 0 0 0 # 000;\nbox-shadow: 0 0 0 # 000;",
-\    },
-\  },
-\  'less' : {
-\    'filters' : 'fc',
-\    'extends' : 'css',
-\  },
-\}
-
-"----------------------------------------------------------
-" unite
-"----------------------------------------------------------
-nnoremap <silent> ,ub :<C-u>Unite buffer<CR>
-nnoremap <silent> ,uf :<C-u>Unite -buffer-name=file file<CR>
-nnoremap <silent> ,um :<C-u>Unite file_mru<CR>
-
-" open windows with horizontal split
-au FileType unite nnoremap <silent> <buffer> <expr> <C-J> unite#do_action('split')
-au FileType unite inoremap <silent> <buffer> <expr> <C-J> unite#do_action('split')
-" open windows with vertical split
-au FileType unite nnoremap <silent> <buffer> <expr> <C-K> unite#do_action('vsplit')
-au FileType unite inoremap <silent> <buffer> <expr> <C-K> unite#do_action('vsplit')
-" quit by ESC*2
-au FileType unite nnoremap <silent> <buffer> <ESC><ESC> :q<CR>
-au FileType unite inoremap <silent> <buffer> <ESC><ESC> <ESC>:q<CR>
-
-"----------------------------------------------------------
-" neocomplcache
-"----------------------------------------------------------
-
-let g:neocomplcache_enable_at_startup = 1
-
-" Enable omni completion. Not required if they are already set elsewhere in .vimrc
-autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-
-"----------------------------------------------------------
-" neosnippet
-"----------------------------------------------------------
-" Plugin key-mappings.
-imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-xmap <C-k>     <Plug>(neosnippet_expand_target)
-
-" SuperTab like snippets behavior.
-imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)"
-\: pumvisible() ? "\<C-n>" : "\<TAB>"
-smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)"
-\: "\<TAB>"
-
-" For snippet_complete marker.
-if has('conceal')
-  set conceallevel=2 concealcursor=i
+if has('syntax')
+    augroup ZenkakuSpace
+        autocmd!
+        autocmd ColorScheme       * call ZenkakuSpace()
+        autocmd VimEnter,WinEnter * match ZenkakuSpace /　/
+    augroup END
+    call ZenkakuSpace()
 endif

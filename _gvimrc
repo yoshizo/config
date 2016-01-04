@@ -1,10 +1,10 @@
-"背景色など
-colorscheme evening
-"フォント
+"colorscheme evening
+colorscheme jellybeans
+"colorscheme desert
+"colorscheme hybrid
+set background=dark
 set guifont=MS_Gothic:h9:cSHIFTJIS
-"行番号
 set number
-"ビープ音を消す
 set visualbell t_vb=
 
 source $VIMRUNTIME/delmenu.vim
