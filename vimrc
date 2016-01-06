@@ -12,7 +12,8 @@
 "git clone https://github.com/tpope/vim-abolish.git
 "git clone https://github.com/tpope/vim-fugitive
 "git clone https://github.com/tpope/vim-surround.git
-"git clone https://github.com/Shougo/vimshell.vim.git
+"git clone https://github.com/Shougo/unite.vim.git
+"git clone https://github.com/Shougo/neomru.vim
 "
 set nocompatible
 filetype off
@@ -96,7 +97,23 @@ nnoremap <C-J> <C-w>j
 nnoremap <C-K> <C-w>k
 "nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
 nnoremap /  /\v
-:cnoremap %s/ %s/\v
+cnoremap %s/ %s/\v
+
+
+"Enable histroy/yank
+let g:unite_source_history_yank_enable =1
+"prefix key of unite
+nmap <Space> [unite]
+
+nnoremap <silent> [unite]a :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
+nnoremap <silent> [unite]f :<C-u>Unite<Space>buffer file_mru<CR>
+nnoremap <silent> [unite]d :<C-u>Unite<Space>directory_mru<CR>
+nnoremap <silent> [unite]b :<C-u>Unite<Space>buffer<CR>
+nnoremap <silent> [unite]r :<C-u>Unite<Space>register<CR>
+nnoremap <silent> [unite]t :<C-u>Unite<Space>tab<CR>
+"nnoremap <silent> [unite]h :<C-u>Unite<Space>history/yank<CR>
+"nnoremap <silent> [unite]o :<C-u>Unite<Space>outline<CR>
+nnoremap <silent> [unite]<CR> :<C-u>Unite<Space>file_rec:!<CR>
 
 function! ZenkakuSpace()
     highlight ZenkakuSpace cterm=reverse ctermfg=DarkMagenta gui=reverse guifg=DarkRed
