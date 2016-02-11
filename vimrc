@@ -14,6 +14,7 @@
 "git clone https://github.com/tpope/vim-surround.git
 "git clone https://github.com/Shougo/unite.vim.git
 "git clone https://github.com/Shougo/neomru.vim
+"git clone https://github.com/Shougo/vimshell.vim.git
 "
 set nocompatible
 filetype off
@@ -72,6 +73,10 @@ nnoremap <silent> [b :bprevious<CR>
 nnoremap <silent> ]b :bnext<CR>
 nnoremap <silent> [B :bfirst<CR>
 nnoremap <silent> ]B :blast<CR>
+"nnoremap <silent> [c :cprevious<CR>
+"nnoremap <silent> ]c :cnext<CR>
+"nnoremap <silent> [C :cfirst<CR>
+"nnoremap <silent> ]C :clast<CR>
 nnoremap <silent> [q :qprevious<CR>
 nnoremap <silent> ]q :qnext<CR>
 nnoremap <silent> [Q :qfirst<CR>
@@ -87,9 +92,9 @@ nnoremap <silent> ]T :tablast<CR>
 nnoremap <C-N> :bn<CR>
 nnoremap <C-P> :bp<CR>
 nnoremap <C-C> :bp\|bd #<CR>
-nnoremap <Space>b :ls<CR>:buffer 
-nnoremap <Space>f :edit .<CR>
-nnoremap <Space>v :vsplit<CR><C-w><C-w>:ls<CR>:buffer
+"nnoremap <Space>b :ls<CR>:buffer
+"nnoremap <Space>f :edit .<CR>
+"nnoremap <Space>v :vsplit<CR><C-w><C-w>:ls<CR>:buffer
 nnoremap <Space>V :Vexplore!<CR><CR>
 nnoremap <C-H> <C-w>h
 nnoremap <C-L> <C-w>l
@@ -97,8 +102,7 @@ nnoremap <C-J> <C-w>j
 nnoremap <C-K> <C-w>k
 "nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
 nnoremap /  /\v
-cnoremap %s/ %s/\v
-
+:cnoremap %s/ %s/\v
 
 "Enable histroy/yank
 let g:unite_source_history_yank_enable =1
@@ -106,14 +110,15 @@ let g:unite_source_history_yank_enable =1
 nmap <Space> [unite]
 
 nnoremap <silent> [unite]a :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
-nnoremap <silent> [unite]f :<C-u>Unite<Space>buffer file_mru<CR>
-nnoremap <silent> [unite]d :<C-u>Unite<Space>directory_mru<CR>
-nnoremap <silent> [unite]b :<C-u>Unite<Space>buffer<CR>
-nnoremap <silent> [unite]r :<C-u>Unite<Space>register<CR>
-nnoremap <silent> [unite]t :<C-u>Unite<Space>tab<CR>
-"nnoremap <silent> [unite]h :<C-u>Unite<Space>history/yank<CR>
-"nnoremap <silent> [unite]o :<C-u>Unite<Space>outline<CR>
+nnoremap <silent> [unite]f :<C-u>Unite -vertical -winwidth=60 buffer file_mru<CR>
+nnoremap <silent> [unite]d :<C-u>Unite -vertical -winwidth=60 directory_mru<CR>
+nnoremap <silent> [unite]b :<C-u>Unite -vertical -winwidth=60 buffer<CR>
+nnoremap <silent> [unite]r :<C-u>Unite -vertical -winwidth=60 register<CR>
+nnoremap <silent> [unite]t :<C-u>Unite -vertical -winwidth=60 tab<CR>
+nnoremap <silent> [unite]h :<C-u>Unite<Space>history/unite<CR>
 nnoremap <silent> [unite]<CR> :<C-u>Unite<Space>file_rec:!<CR>
+
+autocmd QuickFixCmdPost *grep* cwindow
 
 function! ZenkakuSpace()
     highlight ZenkakuSpace cterm=reverse ctermfg=DarkMagenta gui=reverse guifg=DarkRed
@@ -127,3 +132,5 @@ if has('syntax')
     augroup END
     call ZenkakuSpace()
 endif
+
+set diffopt+=vertical
