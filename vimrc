@@ -1,21 +1,3 @@
-"
-"TODO for using this on new environment
-"
-"1. Install pathogen
-"mkdir -p ~/.vim/autoload ~/.vim/bundle && \
-"curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
-"(Reference: https://github.com/tpope/vim-pathogen)
-"
-"2. Install plugins
-"cd ~/.vim/bundle
-"git clone https://github.com/mattn/emmet-vim.git
-"git clone https://github.com/tpope/vim-abolish.git
-"git clone https://github.com/tpope/vim-fugitive
-"git clone https://github.com/tpope/vim-surround.git
-"git clone https://github.com/Shougo/unite.vim.git
-"git clone https://github.com/Shougo/neomru.vim
-"git clone https://github.com/Shougo/vimshell.vim.git
-"
 set nocompatible
 filetype off
 syntax on
@@ -48,8 +30,8 @@ set hidden
 "other
 set ambiwidth=double
 set noswapfile
-set backupdir=$HOME/vimfiles/vimbackup
-set directory=$HOME/vimfiles/vimbackup
+set backupdir=$HOME/.vim/backup
+set directory=$HOME/.vim/backup
 set clipboard=unnamed,autoselect
 set wildmode=longest:full,full
 set noundofile
@@ -134,3 +116,5 @@ if has('syntax')
 endif
 
 set diffopt+=vertical
+
+colorscheme jellybeans
