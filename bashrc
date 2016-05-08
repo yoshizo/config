@@ -19,6 +19,15 @@ shopt -s histappend
 HISTSIZE=1000
 HISTFILESIZE=2000
 
+# Share history among tmux sessions
+function share_history() {
+  history -a
+  history -c
+  history -r
+}
+
+PROMPT_COMMAND='share_history'
+
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
