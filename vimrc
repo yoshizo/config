@@ -3,7 +3,8 @@ filetype off
 syntax on
 
 "plugin
-execute pathogen#infect()
+call pathogen#infect()
+call pathogen#helptags()
 filetype plugin indent on
 
 "encoding
@@ -86,11 +87,10 @@ nnoremap <C-K> <C-w>k
 nnoremap /  /\v
 :cnoremap %s/ %s/\v
 
-"Enable histroy/yank
+"Unite
 let g:unite_source_history_yank_enable =1
-"prefix key of unite
-nmap <Space> [unite]
 
+nmap <Space> [unite]
 nnoremap <silent> [unite]a :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
 nnoremap <silent> [unite]f :<C-u>Unite -vertical -winwidth=60 buffer file_mru<CR>
 nnoremap <silent> [unite]d :<C-u>Unite -vertical -winwidth=60 directory_mru<CR>
@@ -99,6 +99,25 @@ nnoremap <silent> [unite]r :<C-u>Unite -vertical -winwidth=60 register<CR>
 nnoremap <silent> [unite]t :<C-u>Unite -vertical -winwidth=60 tab<CR>
 nnoremap <silent> [unite]h :<C-u>Unite<Space>history/unite<CR>
 nnoremap <silent> [unite]<CR> :<C-u>Unite<Space>file_rec:!<CR>
+
+"Vimux
+nmap t [vimux]
+nnoremap <silent> [vimux]ls :call VimuxRunCommand("ls ")<CR>
+nnoremap <silent> [vimux]mva :call VimuxRunCommand("mvn validate -f " . bufname("%"))<CR>
+nnoremap <silent> [vimux]mini :call VimuxRunCommand("mvn initialize -f " . bufname("%"))<CR>
+nnoremap <silent> [vimux]mt :call VimuxRunCommand("mvn test -f " . bufname("%"))<CR>
+nnoremap <silent> [vimux]mve :call VimuxRunCommand("mvn verify -DskipTests -f " . bufname("%"))<CR>
+nnoremap <silent> [vimux]mins :call VimuxRunCommand("mvn install -DskipTests -f " . bufname("%"))<CR>
+nnoremap <silent> [vimux]p :VimuxPromptCommand<CR>
+nnoremap <silent> [vimux]l :VimuxRunLastCommand<CR>
+nnoremap <silent> [vimux]i :VimuxInspectRunner<CR>
+nnoremap <silent> [vimux]q :VimuxCloseRunner<CR>
+nnoremap <silent> [vimux]x :VimuxInterruptRunner<CR>
+nnoremap <silent> [vimux]z :call VimuxZoomRunner()<CR>
+nnoremap <silent> [vimux]o :call VimuxOpenRunner()<CR>
+"Should not change pwd after command execution
+nnoremap <silent> [vimux]pp :VimuxPromptCommand("cd ".shellescape(expand('%:p:h'), 1)." && ")<CR>
+
 
 autocmd QuickFixCmdPost *grep* cwindow
 
