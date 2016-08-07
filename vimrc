@@ -24,9 +24,12 @@ syntax on
 execute pathogen#infect()
 filetype plugin indent on
 
+set ff=unix
+
 "encoding
 set encoding=utf-8
 set fileencodings=ucs-bom,utf-8,iso-2022-jp,sjis,cp932,euc-jp,cp20932
+set fileformats=unix,dos,mac
 
 "cursor
 set whichwrap=b,s,h,l,<,>,[,]
@@ -50,14 +53,17 @@ set ambiwidth=double
 set noswapfile
 set backupdir=$HOME/vimfiles/vimbackup
 set directory=$HOME/vimfiles/vimbackup
-set clipboard=unnamed,autoselect
+"set clipboard=unnamed,autoselect
+set clipboard+=unnamed
+
 set wildmode=longest:full,full
 set noundofile
 set history=2000
 
 "display
 set list
-set listchars=tab:▸\ ,trail:_,eol:¬,extends:>,precedes:<,nbsp:%
+"set listchars=tab:▸\ ,trail:_,eol:¬,extends:>,precedes:<,nbsp:%
+set listchars=tab:▸\ ,trail:_,extends:>,precedes:<,nbsp:%
 
 "file-browsing
 let g:netrw_localcopycmd=''
@@ -85,10 +91,12 @@ nnoremap <silent> [l :lprevious<CR>
 nnoremap <silent> ]l :lnext<CR>
 nnoremap <silent> [L :lfirst<CR>
 nnoremap <silent> ]L :llast<CR>
-nnoremap <silent> [t :tabprevious<CR>
-nnoremap <silent> ]t :tabNext<CR>
-nnoremap <silent> [T :tabfirst<CR>
-nnoremap <silent> ]T :tablast<CR>
+
+nnoremap <silent> <C-S-tab> :tabprevious<CR>
+nnoremap <silent> <C-tab>   :tabnext<CR>
+nnoremap <silent> <A-Left>  :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
+nnoremap <silent> <A-Right> :execute 'silent! tabmove ' . (tabpagenr())<CR>
+
 nnoremap <C-N> :bn<CR>
 nnoremap <C-P> :bp<CR>
 nnoremap <C-C> :bp\|bd #<CR>
@@ -102,7 +110,7 @@ nnoremap <C-J> <C-w>j
 nnoremap <C-K> <C-w>k
 "nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
 nnoremap /  /\v
-:cnoremap %s/ %s/\v
+cnoremap %s/ %s/\v
 
 "Enable histroy/yank
 let g:unite_source_history_yank_enable =1
