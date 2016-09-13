@@ -25,10 +25,10 @@ mkdir -p ~/.vim/autoload ~/.vim/bundle ~/.vim/colors ~/.vim/backup
 
 # Install pathogen
 # Reference: https://github.com/tpope/vim-pathogen
-curl -fSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
+curl -fLSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 
 # Install color scheme
-curl -fSso ~/.vim/colors/jellybeans.vim https://raw.githubusercontent.com/nanotech/jellybeans.vim/master/colors/jellybeans.vim 
+curl -fLSso ~/.vim/colors/jellybeans.vim https://raw.githubusercontent.com/nanotech/jellybeans.vim/master/colors/jellybeans.vim 
 
 # Install plugins
 cd ~/.vim/bundle
