@@ -34,7 +34,7 @@ set ambiwidth=double
 set noswapfile
 set backupdir=$HOME/.vim/backup
 set directory=$HOME/.vim/backup
-set clipboard=unnamed,autoselect
+set clipboard=unnamedplus
 set wildmode=longest:full,full
 set noundofile
 set history=2000
