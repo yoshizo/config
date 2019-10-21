@@ -7,6 +7,16 @@ call pathogen#infect()
 call pathogen#helptags()
 filetype plugin indent on
 
+"syntastic
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
 "encoding
 set encoding=utf-8
 set fileencodings=ucs-bom,utf-8,iso-2022-jp,sjis,cp932,euc-jp,cp20932
@@ -28,6 +38,9 @@ set textwidth=9999
 
 "buffer
 set hidden
+
+"vimgrep
+set grepprg=git\ grep\ -n
 
 "other
 set ambiwidth=double
@@ -52,6 +65,11 @@ let g:netrw_liststyle=3
 let g:netrw_winsize=80
 let g:netrw_altv=1
 let g:netrw_alto=1
+
+"terraform
+let g:terraform_align=1
+let g:terraform_fold_sections=0
+let g:terraform_fmt_on_save=1
 
 "key-bind
 nnoremap <silent> [b :bprevious<CR>
@@ -89,7 +107,6 @@ nnoremap <C-J> <C-w>j
 nnoremap <C-K> <C-w>k
 "nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
 nnoremap /  /\v
-cnoremap %s/ %s/\v
 
 "Open current window on new tab
 nmap t% :tabedit %<CR>
