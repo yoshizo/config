@@ -129,3 +129,10 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+# Activate venv
+if [[ -f ~/default/bin/activate ]] ; then
+  source ~/default/bin/activate
+fi
+
+export PATH=$PATH:~/bin

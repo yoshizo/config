@@ -2,10 +2,18 @@
 
 set -ex
 
-# Install some applications
+# Install some tools
 sudo apt-get update
-sudo apt-get install -y git curl
+sudo apt-get install -y git curl jq
 sudo apt-get install -y tmux xclip vim-gtk vim-athena vim-gnome
+
+# Install Docker
+curl -sSL https://get.docker.com/ | sudo sh
+sudo gpasswd -a "$(id -n -u)" docker
+
+# Install docker-compose
+sudo curl -L "https://github.com/docker/compose/releases/download/1.25.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
 
 # Setup for Vim
 git clone git://github.com/yoshizo/dotfiles.git ~/dotfiles
@@ -21,23 +29,10 @@ ln -s ~/dotfiles/gitconfig ~/.gitconfig
 ln -s ~/dotfiles/bashrc ~/.bashrc
 
 # Setup directory
-mkdir -p ~/.vim/autoload ~/.vim/bundle ~/.vim/colors ~/.vim/backup
-
-# Install pathogen
-# Reference: https://github.com/tpope/vim-pathogen
-curl -fLSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
+mkdir -p ~/.vim/autoload ~/.vim/colors ~/.vim/backup
 
 # Install color scheme
 curl -fLSso ~/.vim/colors/jellybeans.vim https://raw.githubusercontent.com/nanotech/jellybeans.vim/master/colors/jellybeans.vim 
 
-# Install plugins
-cd ~/.vim/bundle
-git clone https://github.com/mattn/emmet-vim.git
-git clone https://github.com/Shougo/neomru.vim
-git clone https://github.com/Shougo/unite.vim.git
-git clone https://github.com/Shougo/vimshell.vim.git
-git clone https://github.com/tpope/vim-abolish.git
-git clone https://github.com/tpope/vim-fugitive
-git clone https://github.com/tpope/vim-surround.git
-git clone https://github.com/fatih/vim-go.git
-git clone https://github.com/hashivim/vim-terraform.git
+# Create python default workspace
+python3 -m venv ~/default

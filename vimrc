@@ -3,8 +3,29 @@ filetype off
 syntax on
 
 "plugin
-call pathogen#infect()
-call pathogen#helptags()
+"Download and install vim-plug (cross platform).
+if empty(glob(
+    \ '$HOME/' . (has('win32') ? 'vimfiles' : '.vim') . '/autoload/plug.vim'))
+  execute '!curl -fsSLo ' .
+    \ (has('win32') ? '\%USERPROFILE\%/vimfiles' : '$HOME/.vim') .
+    \ '/autoload/plug.vim --create-dirs ' .
+    \ 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+call plug#begin()
+Plug 'mattn/emmet-vim'
+Plug 'Shougo/neomru.vim'
+Plug 'Shougo/unite.vim'
+Plug 'Shougo/vimshell.vim'
+Plug 'tpope/vim-abolish'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-surround'
+Plug 'fatih/vim-go'
+Plug 'hashivim/vim-terraform'
+Plug 'vim-syntastic/syntastic'
+Plug 'christoomey/vim-tmux-navigator'
+call plug#end()
+
 filetype plugin indent on
 
 "syntastic
@@ -12,10 +33,30 @@ set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
+"Search history
+cnoremap <C-p> <Up>
+cnoremap <C-n> <Down>
+
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+
+" (Optional)Remove Info(Preview) window
+set completeopt-=preview
+
+" (Optional)Hide Info(Preview) window after completions
+autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+
+" (Optional) Enable terraform plan to be include in filter
+let g:syntastic_terraform_tffilter_plan = 1
+
+" (Optional) Default: 0, enable(1)/disable(0) plugin's keymapping
+let g:terraform_completion_keys = 1
+
+" (Optional) Default: 1, enable(1)/disable(0) terraform module registry completion
+let g:terraform_registry_module_completion = 0
 
 "encoding
 set encoding=utf-8
@@ -106,7 +147,7 @@ nnoremap <C-L> <C-w>l
 nnoremap <C-J> <C-w>j
 nnoremap <C-K> <C-w>k
 "nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
-nnoremap /  /\v
+"nnoremap /  /\v
 
 "Open current window on new tab
 nmap t% :tabedit %<CR>
