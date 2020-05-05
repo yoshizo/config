@@ -58,10 +58,10 @@ nnoremap <silent> [b :bprevious<CR>
 nnoremap <silent> ]b :bnext<CR>
 nnoremap <silent> [B :bfirst<CR>
 nnoremap <silent> ]B :blast<CR>
-"nnoremap <silent> [c :cprevious<CR>
-"nnoremap <silent> ]c :cnext<CR>
-"nnoremap <silent> [C :cfirst<CR>
-"nnoremap <silent> ]C :clast<CR>
+nnoremap <silent> [c :cprevious<CR>
+nnoremap <silent> ]c :cnext<CR>
+nnoremap <silent> [C :cfirst<CR>
+nnoremap <silent> ]C :clast<CR>
 nnoremap <silent> [q :qprevious<CR>
 nnoremap <silent> ]q :qnext<CR>
 nnoremap <silent> [Q :qfirst<CR>
@@ -90,6 +90,19 @@ nnoremap <C-K> <C-w>k
 "nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
 nnoremap /  /\v
 cnoremap %s/ %s/\v
+
+"Open current window on new tab
+nmap t% :tabedit %<CR>
+nmap tc :tabclose<CR>
+
+"Keep cursor postion on new tab
+"Ref: https://vim.fandom.com/wiki/Maximize_window_and_return_to_previous_split_structure
+function! OpenCurrentAsNewTab()
+    let l:currentPos = getcurpos()
+    tabedit %
+    call setpos(".", l:currentPos)
+endfunction
+nmap t% :call OpenCurrentAsNewTab()<CR>
 
 "Unite
 let g:unite_source_history_yank_enable =1
