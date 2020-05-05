@@ -23,7 +23,6 @@ Plug 'tpope/vim-surround'
 Plug 'fatih/vim-go'
 Plug 'hashivim/vim-terraform'
 Plug 'vim-syntastic/syntastic'
-Plug 'christoomey/vim-tmux-navigator'
 call plug#end()
 
 filetype plugin indent on
