@@ -24,9 +24,16 @@ Plug 'fatih/vim-go'
 Plug 'hashivim/vim-terraform'
 Plug 'vim-syntastic/syntastic'
 "Plug 'dense-analysis/ale'
+Plug 'vim-airline/vim-airline'
 call plug#end()
 
 filetype plugin indent on
+
+"status-line
+"Always display status line
+set laststatus=2
+"Display last executed command
+set showcmd
 
 "syntastic
 set statusline+=%#warningmsg#
