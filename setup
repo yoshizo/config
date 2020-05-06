@@ -2,37 +2,85 @@
 
 set -ex
 
-# Install some tools
-sudo apt-get update
-sudo apt-get install -y git curl jq
-sudo apt-get install -y tmux xclip vim-gtk vim-athena vim-gnome
+main() {
+  setup_dotfiles
+  install_tools
+  install_docker
+  install_docker_compose
+  configure_vim
+  configure_ctags
+  make_default_venv
+}
 
-# Install Docker
-curl -sSL https://get.docker.com/ | sudo sh
-sudo gpasswd -a "$(id -n -u)" docker
+setup_dotfiles() {
+  # Setup for Vim
+  if [[ ! -d ~/dotfiles ]] ; then
+    git clone git://github.com/yoshizo/dotfiles.git ~/dotfiles
+  fi
 
-# Install docker-compose
-sudo curl -L "https://github.com/docker/compose/releases/download/1.25.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
+  [[ -e ~/.vimrc ]] && mv ~/.vimrc ~/.vimrc.bak
+  [[ -e ~/.tmux.conf ]] && mv ~/.tmux.conf ~/.tmux.conf.bak
+  [[ -e ~/.gitconfig ]] && mv ~/.gitconfig ~/.gitconfig.bak
+  [[ -e ~/.bashrc ]] && mv ~/.bashrc ~/.bashrc.bak
 
-# Setup for Vim
-git clone git://github.com/yoshizo/dotfiles.git ~/dotfiles
+  ln -s ~/dotfiles/vimrc ~/.vimrc
+  ln -s ~/dotfiles/tmux.conf ~/.tmux.conf
+  ln -s ~/dotfiles/gitconfig ~/.gitconfig
+  ln -s ~/dotfiles/bashrc ~/.bashrc
+}
 
-[[ -e ~/.vimrc ]] && mv ~/.vimrc ~/.vimrc.bak
-[[ -e ~/.tmux.conf ]] && mv ~/.tmux.conf ~/.tmux.conf.bak
-[[ -e ~/.gitconfig ]] && mv ~/.gitconfig ~/.gitconfig.bak
-[[ -e ~/.bashrc ]] && mv ~/.bashrc ~/.bashrc.bak
+install_tools() {
+  sudo apt-get update
+  sudo apt-get install -y git curl jq
+  sudo apt-get install -y tmux xclip vim-gtk vim-athena vim-gnome ctags
+}
 
-ln -s ~/dotfiles/vimrc ~/.vimrc
-ln -s ~/dotfiles/tmux.conf ~/.tmux.conf
-ln -s ~/dotfiles/gitconfig ~/.gitconfig
-ln -s ~/dotfiles/bashrc ~/.bashrc
+install_docker() {
+  curl -sSL https://get.docker.com/ | sudo sh
+  sudo gpasswd -a "$(id -n -u)" docker
+}
 
-# Setup directory
-mkdir -p ~/.vim/autoload ~/.vim/colors ~/.vim/backup
+install_docker_compose() {
+  sudo curl -L "https://github.com/docker/compose/releases/download/1.25.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  sudo chmod +x /usr/local/bin/docker-compose
+}
 
-# Install color scheme
-curl -fLSso ~/.vim/colors/jellybeans.vim https://raw.githubusercontent.com/nanotech/jellybeans.vim/master/colors/jellybeans.vim 
+configure_vim() {
+  # Setup directory
+  mkdir -p ~/.vim/autoload ~/.vim/colors ~/.vim/backup
 
-# Create python default workspace
-python3 -m venv ~/default
+  # Install color scheme
+  curl -fLSso ~/.vim/colors/jellybeans.vim https://raw.githubusercontent.com/nanotech/jellybeans.vim/master/colors/jellybeans.vim
+}
+
+configure_ctags() {
+  # Configure for ctags
+  # Ref: https://tbaggery.com/2011/08/08/effortless-ctags-with-git.html
+  mkdir -p ~/.git_template/hooks
+  cat << 'EOS' > ~/.git_template/hooks/ctags
+#!/bin/sh
+set -e
+PATH="/usr/local/bin:$PATH"
+trap 'rm -f "$$.tags"' EXIT
+git ls-files | \
+    ctags --tag-relative -L - -f"$$.tags" --languages=-javascript,sql
+mv "$$.tags" "tags"
+EOS
+  cat << 'EOS' | tee >(~/.git_template/hooks/post-commit) >(~/.git_template/hooks/post-merge) >(~/.git_template/hooks/post-checkout)
+#!/bin/sh
+.git/hooks/ctags >/dev/null 2>&1 &
+EOS
+  cat << 'EOS' > ~/.git_template/hooks/post-rewrite
+#!/bin/sh
+case "$1" in
+  rebase) exec .git/hooks/post-merge ;;
+esac
+EOS
+  chmod +x ~/.git_template/hooks/*
+}
+
+make_default_venv() {
+  python3 -m venv ~/default
+}
+
+main

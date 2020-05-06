@@ -23,6 +23,7 @@ Plug 'tpope/vim-surround'
 Plug 'fatih/vim-go'
 Plug 'hashivim/vim-terraform'
 Plug 'vim-syntastic/syntastic'
+"Plug 'dense-analysis/ale'
 call plug#end()
 
 filetype plugin indent on
