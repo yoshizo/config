@@ -2,7 +2,6 @@ set nocompatible
 filetype off
 syntax on
 
-"plugin
 "Download and install vim-plug (cross platform).
 if empty(glob(
     \ '$HOME/' . (has('win32') ? 'vimfiles' : '.vim') . '/autoload/plug.vim'))
@@ -12,6 +11,8 @@ if empty(glob(
     \ 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
+
+"plugin
 call plug#begin()
 Plug 'mattn/emmet-vim'
 Plug 'Shougo/neomru.vim'
@@ -36,43 +37,26 @@ set laststatus=2
 "Display last executed command
 set showcmd
 
-"syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-"Search history
+"Trace back command history as same as terminal
 cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-
-" (Optional)Remove Info(Preview) window
-set completeopt-=preview
-
-" (Optional)Hide Info(Preview) window after completions
-autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
-autocmd InsertLeave * if pumvisible() == 0|pclose|endif
-
-" (Optional) Enable terraform plan to be include in filter
-let g:syntastic_terraform_tffilter_plan = 1
-
-" (Optional) Default: 0, enable(1)/disable(0) plugin's keymapping
-let g:terraform_completion_keys = 1
-
-" (Optional) Default: 1, enable(1)/disable(0) terraform module registry completion
-let g:terraform_registry_module_completion = 0
 
 "encoding
 set encoding=utf-8
 set fileencodings=ucs-bom,utf-8,iso-2022-jp,sjis,cp932,euc-jp,cp20932
 set fileformats=unix,dos,mac
 
-"cursor
+"Carriage return cursor at end of line
 set whichwrap=b,s,h,l,<,>,[,]
+
+"Highlight current cursor line (it make slow)
+"set cursorline
+
+"Display line number
+set number
+
+"Display long line as much as possible
+set display+=lastline
 
 "search
 set incsearch
@@ -122,6 +106,32 @@ let g:netrw_liststyle=3
 let g:netrw_winsize=80
 let g:netrw_altv=1
 let g:netrw_alto=1
+
+"syntastic
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+" (Optional)Remove Info(Preview) window
+set completeopt-=preview
+
+" (Optional)Hide Info(Preview) window after completions
+autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+
+" (Optional) Enable terraform plan to be include in filter
+let g:syntastic_terraform_tffilter_plan = 1
+
+" (Optional) Default: 0, enable(1)/disable(0) plugin's keymapping
+let g:terraform_completion_keys = 1
+
+" (Optional) Default: 1, enable(1)/disable(0) terraform module registry completion
+let g:terraform_registry_module_completion = 0
 
 "terraform
 let g:terraform_align=1
