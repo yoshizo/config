@@ -2,6 +2,7 @@ set nocompatible
 filetype off
 syntax on
 
+"=> Pre-load ------------------------------------------------------------------- {{{1
 "Download and install vim-plug (cross platform).
 if empty(glob(
     \ '$HOME/' . (has('win32') ? 'vimfiles' : '.vim') . '/autoload/plug.vim'))
@@ -12,8 +13,9 @@ if empty(glob(
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-"plugin
+"=> Plugin --------------------------------------------------------------------- {{{1
 call plug#begin()
+Plug 'easymotion/vim-easymotion'
 Plug 'mattn/emmet-vim'
 Plug 'Shougo/neomru.vim'
 Plug 'Shougo/unite.vim'
@@ -31,26 +33,13 @@ call plug#end()
 
 filetype plugin indent on
 
-"status-line
-"Always display status line
-set laststatus=2
-"Display last executed command
-set showcmd
+"=> Looks ---------------------------------------------------------------------- {{{1
+colorscheme jellybeans
 
-"Trace back command history as same as terminal
-cnoremap <C-p> <Up>
-cnoremap <C-n> <Down>
-
-"encoding
-set encoding=utf-8
-set fileencodings=ucs-bom,utf-8,iso-2022-jp,sjis,cp932,euc-jp,cp20932
-set fileformats=unix,dos,mac
-
-"Carriage return cursor at end of line
-set whichwrap=b,s,h,l,<,>,[,]
-
-"Highlight current cursor line (it make slow)
-"set cursorline
+"Display imvisible characters
+set list
+"set listchars=tab:▸\ ,trail:_,eol:¬,extends:>,precedes:<,nbsp:%
+set listchars=tab:▸\ ,trail:_,extends:>,precedes:<,nbsp:%
 
 "Display line number
 set number
@@ -58,32 +47,33 @@ set number
 "Display long line as much as possible
 set display+=lastline
 
-"search
-set incsearch
-set hlsearch
+"status-line
+"Always display status line
+set laststatus=2
+"Display last executed command
+set showcmd
 
-"format
-set expandtab
-set tabstop=2
-set softtabstop=0
-set shiftwidth=2
-set textwidth=9999
+"Highlight current cursor line (it make slow)
+"set cursorline
 
-"buffer
-set hidden
+"Highlight Zenkaku space
+function! ZenkakuSpace()
+    highlight ZenkakuSpace cterm=reverse ctermfg=DarkMagenta gui=reverse guifg=DarkRed
+endfunction
+if has('syntax')
+    augroup ZenkakuSpace
+        autocmd!
+        autocmd ColorScheme       * call ZenkakuSpace()
+        autocmd VimEnter,WinEnter * match ZenkakuSpace /　/
+    augroup END
+    call ZenkakuSpace()
+endif
 
-"vimgrep
-set grepprg=git\ grep\ -n
-nnoremap <leader>g :grep <c-r><c-w> **<cr>
+"Split windows vertically when diff split is used
+set diffopt+=vertical
 
-"fugitive
-nnoremap gs :Gstatus<cr>
+"=> Vim Misc ------------------------------------------------------------------- {{{1
 
-"ctrlp
-nnoremap <leader>p :CtrlP <cr>
-nnoremap <leader>t :CtrlPTag <cr>
-
-"other
 set ambiwidth=double
 set noswapfile
 set backupdir=$HOME/.vim/backup
@@ -93,12 +83,22 @@ set wildmode=longest:full,full
 set noundofile
 set history=2000
 
-"display
-set list
-"set listchars=tab:▸\ ,trail:_,eol:¬,extends:>,precedes:<,nbsp:%
-set listchars=tab:▸\ ,trail:_,extends:>,precedes:<,nbsp:%
+"=> File and Format ------------------------------------------------------------ {{{1
 
-"file-browsing
+"encoding
+set encoding=utf-8
+set fileencodings=ucs-bom,utf-8,iso-2022-jp,sjis,cp932,euc-jp,cp20932
+set fileformats=unix,dos,mac
+
+"format
+set expandtab
+set tabstop=2
+set softtabstop=0
+set shiftwidth=2
+set textwidth=9999
+
+"=> File browsing -------------------------------------------------------------- {{{1
+
 let g:netrw_localcopycmd=''
 let g:netrw_preview=1
 set browsedir=buffer
@@ -107,38 +107,30 @@ let g:netrw_winsize=80
 let g:netrw_altv=1
 let g:netrw_alto=1
 
-"syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
+"ctrlp
+nnoremap <leader>p :CtrlP <cr>
+nnoremap <leader>t :CtrlPTag <cr>
 
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+"=> Movement and Search -------------------------------------------------------- {{{1
 
-" (Optional)Remove Info(Preview) window
-set completeopt-=preview
+set incsearch
+set hlsearch
 
-" (Optional)Hide Info(Preview) window after completions
-autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
-autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+"Carriage return cursor at end of line
+set whichwrap=b,s,h,l,<,>,[,]
 
-" (Optional) Enable terraform plan to be include in filter
-let g:syntastic_terraform_tffilter_plan = 1
+"Trace back command history as same as terminal
+cnoremap <C-p> <Up>
+cnoremap <C-n> <Down>
 
-" (Optional) Default: 0, enable(1)/disable(0) plugin's keymapping
-let g:terraform_completion_keys = 1
+"Allow to move to next buffer without save
+set hidden
 
-" (Optional) Default: 1, enable(1)/disable(0) terraform module registry completion
-let g:terraform_registry_module_completion = 0
+"vimgrep
+set grepprg=git\ grep\ -n
+nnoremap <leader>g :grep <c-r><c-w> **<cr>
+autocmd QuickFixCmdPost *grep* cwindow
 
-"terraform
-let g:terraform_align=1
-let g:terraform_fold_sections=0
-let g:terraform_fmt_on_save=1
-
-"key-bind
 nnoremap <silent> [b :bprevious<CR>
 nnoremap <silent> ]b :bnext<CR>
 nnoremap <silent> [B :bfirst<CR>
@@ -175,6 +167,17 @@ nnoremap <C-K> <C-w>k
 "nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
 "nnoremap /  /\v
 
+"=> Completion ----------------------------------------------------------------- {{{1
+
+" (Optional)Remove Info(Preview) window
+set completeopt-=preview
+
+" (Optional)Hide Info(Preview) window after completions
+autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+
+"=> Windows and Tabs ----------------------------------------------------------- {{{1
+
 "Open current window on new tab
 nmap t% :tabedit %<CR>
 nmap tc :tabclose<CR>
@@ -188,9 +191,36 @@ function! OpenCurrentAsNewTab()
 endfunction
 nmap t% :call OpenCurrentAsNewTab()<CR>
 
+"=> Plugins configuration ------------------------------------------------------ {{{1
+
+"fugitive
+nnoremap gs :Gstatus<cr>
+
+"syntastic
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+"vim-terraform-completion
+" (Optional) Enable terraform plan to be include in filter
+let g:syntastic_terraform_tffilter_plan = 1
+" (Optional) Default: 0, enable(1)/disable(0) plugin's keymapping
+let g:terraform_completion_keys = 1
+" (Optional) Default: 1, enable(1)/disable(0) terraform module registry completion
+let g:terraform_registry_module_completion = 0
+
+"terraform
+let g:terraform_align=1
+let g:terraform_fold_sections=0
+let g:terraform_fmt_on_save=1
+
 "Unite
 let g:unite_source_history_yank_enable =1
-
 nmap <Space> [unite]
 nnoremap <silent> [unite]a :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
 nnoremap <silent> [unite]f :<C-u>Unite -vertical -winwidth=60 buffer file_mru<CR>
@@ -218,23 +248,3 @@ nnoremap <silent> [vimux]z :call VimuxZoomRunner()<CR>
 nnoremap <silent> [vimux]o :call VimuxOpenRunner()<CR>
 "Should not change pwd after command execution
 nnoremap <silent> [vimux]pp :VimuxPromptCommand("cd ".shellescape(expand('%:p:h'), 1)." && ")<CR>
-
-
-autocmd QuickFixCmdPost *grep* cwindow
-
-function! ZenkakuSpace()
-    highlight ZenkakuSpace cterm=reverse ctermfg=DarkMagenta gui=reverse guifg=DarkRed
-endfunction
-
-if has('syntax')
-    augroup ZenkakuSpace
-        autocmd!
-        autocmd ColorScheme       * call ZenkakuSpace()
-        autocmd VimEnter,WinEnter * match ZenkakuSpace /　/
-    augroup END
-    call ZenkakuSpace()
-endif
-
-set diffopt+=vertical
-
-colorscheme jellybeans
