@@ -25,6 +25,7 @@ Plug 'hashivim/vim-terraform'
 Plug 'vim-syntastic/syntastic'
 "Plug 'dense-analysis/ale'
 Plug 'vim-airline/vim-airline'
+Plug 'ctrlpvim/ctrlp.vim'
 call plug#end()
 
 filetype plugin indent on
@@ -89,6 +90,14 @@ set hidden
 
 "vimgrep
 set grepprg=git\ grep\ -n
+nnoremap <leader>g :grep <c-r><c-w> **<cr>
+
+"fugitive
+nnoremap gs :Gstatus<cr>
+
+"ctrlp
+nnoremap <leader>p :CtrlP <cr>
+nnoremap <leader>t :CtrlPTag <cr>
 
 "other
 set ambiwidth=double
@@ -142,9 +151,9 @@ nnoremap <silent> <C-tab>   :tabnext<CR>
 nnoremap <silent> <A-Left>  :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
 nnoremap <silent> <A-Right> :execute 'silent! tabmove ' . (tabpagenr())<CR>
 
-nnoremap <C-N> :bn<CR>
-nnoremap <C-P> :bp<CR>
-nnoremap <C-C> :bp\|bd #<CR>
+"nnoremap <C-N> :bn<CR>
+"nnoremap <C-P> :bp<CR>
+"nnoremap <C-C> :bp\|bd #<CR>
 "nnoremap <Space>b :ls<CR>:buffer
 "nnoremap <Space>f :edit .<CR>
 "nnoremap <Space>v :vsplit<CR><C-w><C-w>:ls<CR>:buffer
