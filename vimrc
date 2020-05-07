@@ -16,19 +16,18 @@ endif
 "=> Plugin --------------------------------------------------------------------- {{{1
 call plug#begin()
 Plug 'easymotion/vim-easymotion'
-Plug 'mattn/emmet-vim'
-Plug 'Shougo/neomru.vim'
-Plug 'Shougo/unite.vim'
-Plug 'Shougo/vimshell.vim'
+Plug 'mattn/emmet-vim'             "HTML coding
+Plug 'Shougo/unite.vim'            "File search
+Plug 'Shougo/neomru.vim'           "File search
 Plug 'tpope/vim-abolish'
-Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-fugitive'          "Git integration
 Plug 'tpope/vim-surround'
 Plug 'fatih/vim-go'
-Plug 'hashivim/vim-terraform'
-Plug 'vim-syntastic/syntastic'
-"Plug 'dense-analysis/ale'
-Plug 'vim-airline/vim-airline'
-Plug 'ctrlpvim/ctrlp.vim'
+Plug 'hashivim/vim-terraform'      "Terraform integration
+Plug 'vim-syntastic/syntastic'     "Linter
+"Plug 'dense-analysis/ale'          "Linter
+Plug 'vim-airline/vim-airline'     "Status line
+Plug 'ctrlpvim/ctrlp.vim'          "File search
 call plug#end()
 
 filetype plugin indent on
@@ -128,7 +127,7 @@ set hidden
 
 "vimgrep
 set grepprg=git\ grep\ -n
-nnoremap <leader>g :grep <c-r><c-w> **<cr>
+nnoremap <leader>g :grep <c-r><c-w> **/*<cr>
 autocmd QuickFixCmdPost *grep* cwindow
 
 nnoremap <silent> [b :bprevious<CR>
